@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "library": "skjson",
+    "version": "0.1.1",
+    "sklearn_version": "1.8.0",
+    "model_type": "LogisticRegression",
+    "task": "classification",
+    "n_features": 4,
+    "feature_names": null,
+    "classes": [
+      0,
+      1
+    ],
+    "serialized_at": "2026-06-02T15:08:27.975571+00:00"
+  },
+  "params": {
+    "coef": [
+      [
+        0.11276811511212986,
+        1.643351019757682,
+        -0.7269189006477458,
+        -1.44944497617978
+      ]
+    ],
+    "intercept": [
+      0.03919986049997815
+    ],
+    "classes": [
+      0,
+      1
+    ]
+  }
+}

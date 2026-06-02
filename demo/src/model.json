@@ -1,0 +1,243 @@
+{
+  "meta": {
+    "library": "skjson",
+    "version": "0.1.1",
+    "sklearn_version": "1.8.0",
+    "model_type": "RandomForestClassifier",
+    "task": "classification",
+    "n_features": 4,
+    "feature_names": null,
+    "classes": [
+      0,
+      1
+    ],
+    "serialized_at": "2026-06-02T15:08:27.953208+00:00"
+  },
+  "params": {
+    "trees": [
+      [
+        {
+          "id": 0,
+          "feature": 1,
+          "threshold": -0.17952976375818253,
+          "left": 1,
+          "right": 2,
+          "value": [
+            0.34,
+            0.66
+          ]
+        },
+        {
+          "id": 1,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": 2,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            0.0,
+            1.0
+          ]
+        }
+      ],
+      [
+        {
+          "id": 0,
+          "feature": 2,
+          "threshold": -0.07008834928274155,
+          "left": 1,
+          "right": 2,
+          "value": [
+            0.6,
+            0.4
+          ]
+        },
+        {
+          "id": 1,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "id": 2,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      [
+        {
+          "id": 0,
+          "feature": 2,
+          "threshold": 0.09994708560407162,
+          "left": 1,
+          "right": 2,
+          "value": [
+            0.52,
+            0.48
+          ]
+        },
+        {
+          "id": 1,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "id": 2,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      [
+        {
+          "id": 0,
+          "feature": 2,
+          "threshold": -0.003925696015357971,
+          "left": 1,
+          "right": 2,
+          "value": [
+            0.58,
+            0.42
+          ]
+        },
+        {
+          "id": 1,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "id": 2,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            1.0,
+            0.0
+          ]
+        }
+      ],
+      [
+        {
+          "id": 0,
+          "feature": 3,
+          "threshold": -0.013970602303743362,
+          "left": 1,
+          "right": 6,
+          "value": [
+            0.56,
+            0.44
+          ]
+        },
+        {
+          "id": 1,
+          "feature": 2,
+          "threshold": -0.07008834928274155,
+          "left": 2,
+          "right": 3,
+          "value": [
+            0.043478260869565216,
+            0.9565217391304348
+          ]
+        },
+        {
+          "id": 2,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "id": 3,
+          "feature": 1,
+          "threshold": 0.1358714997768402,
+          "left": 4,
+          "right": 5,
+          "value": [
+            0.3333333333333333,
+            0.6666666666666666
+          ]
+        },
+        {
+          "id": 4,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            0.0,
+            1.0
+          ]
+        },
+        {
+          "id": 5,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            1.0,
+            0.0
+          ]
+        },
+        {
+          "id": 6,
+          "feature": -2,
+          "threshold": -2.0,
+          "left": -1,
+          "right": -1,
+          "value": [
+            1.0,
+            0.0
+          ]
+        }
+      ]
+    ],
+    "classes": [
+      0,
+      1
+    ]
+  }
+}

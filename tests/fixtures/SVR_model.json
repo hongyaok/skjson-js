@@ -1,0 +1,26 @@
+{
+  "meta": {
+    "library": "skjson",
+    "version": "0.1.1",
+    "sklearn_version": "1.8.0",
+    "model_type": "SVR",
+    "task": "regression",
+    "n_features": 4,
+    "feature_names": null,
+    "classes": null,
+    "serialized_at": "2026-06-02T15:08:27.982739+00:00"
+  },
+  "params": {
+    "coef": [
+      [
+        14.691433074640257,
+        19.476930361994413,
+        22.26105260059881,
+        20.998937612904783
+      ]
+    ],
+    "intercept": [
+      -12.741045001175827
+    ]
+  }
+}

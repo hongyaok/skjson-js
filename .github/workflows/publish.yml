@@ -1,0 +1,63 @@
+name: Publish skjson-js to NPM
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  release:
+    types: [published]
+
+jobs:
+  test_and_audit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Clean Install Defaults
+        run: npm ci
+
+      - name: Vulnerability Audit
+        run: npm run audit:ci
+        
+      - name: Unit & Integration Tests (TDD Enforcement)
+        run: npm run test
+
+      - name: Build Package
+        run: npm run build
+
+  publish:
+    needs: test_and_audit
+    if: github.event_name == 'release' && github.event.action == 'published'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Clean Install Defaults
+        run: npm ci
+
+      - name: Build Package
+        run: npm run build
+
+      - name: Publish Package with Provenance
+        run: npm publish --provenance --access public
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

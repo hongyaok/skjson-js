@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "library": "skjson",
+    "version": "0.1.1",
+    "sklearn_version": "1.8.0",
+    "model_type": "StandardScaler",
+    "task": "transform",
+    "n_features": 4,
+    "feature_names": null,
+    "classes": null,
+    "serialized_at": "2026-06-02T15:08:27.993103+00:00"
+  },
+  "params": {
+    "mean": [
+      -0.08987463419329503,
+      -0.14125387538348452,
+      -0.0010651923989144806,
+      0.06910984128735408
+    ],
+    "scale": [
+      0.6891108952742924,
+      0.9877679103320507,
+      0.9421319377668003,
+      1.041828973640659
+    ],
+    "with_mean": true,
+    "with_std": true
+  }
+}

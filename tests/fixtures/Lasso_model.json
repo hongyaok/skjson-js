@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "library": "skjson",
+    "version": "0.1.1",
+    "sklearn_version": "1.8.0",
+    "model_type": "Lasso",
+    "task": "regression",
+    "n_features": 4,
+    "feature_names": null,
+    "classes": null,
+    "serialized_at": "2026-06-02T15:08:27.972744+00:00"
+  },
+  "params": {
+    "coef": [
+      85.64239516175105,
+      68.48430081561432,
+      73.06957419071688,
+      69.54229812988035
+    ],
+    "intercept": -0.3124978076791649
+  }
+}

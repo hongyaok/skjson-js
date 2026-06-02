@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "library": "skjson",
+    "version": "0.1.1",
+    "sklearn_version": "1.8.0",
+    "model_type": "SVC",
+    "task": "classification",
+    "n_features": 4,
+    "feature_names": null,
+    "classes": [
+      0,
+      1
+    ],
+    "serialized_at": "2026-06-02T15:08:27.980093+00:00"
+  },
+  "params": {
+    "coef": [
+      [
+        -0.0025351772206521073,
+        1.3990855710753327,
+        -0.619398659583456,
+        -1.2555947449010634
+      ]
+    ],
+    "intercept": [
+      0.31329201617424157
+    ],
+    "classes": [
+      0,
+      1
+    ]
+  }
+}

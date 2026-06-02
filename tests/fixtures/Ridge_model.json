@@ -1,0 +1,22 @@
+{
+  "meta": {
+    "library": "skjson",
+    "version": "0.1.1",
+    "sklearn_version": "1.8.0",
+    "model_type": "Ridge",
+    "task": "regression",
+    "n_features": 4,
+    "feature_names": null,
+    "classes": null,
+    "serialized_at": "2026-06-02T15:08:27.971296+00:00"
+  },
+  "params": {
+    "coef": [
+      84.20705340729863,
+      68.00153766071432,
+      72.63308653218049,
+      69.29681030831097
+    ],
+    "intercept": -0.49319010827437815
+  }
+}
