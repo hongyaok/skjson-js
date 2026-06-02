@@ -81,6 +81,10 @@ console.log("Predicted Class:", prediction[0]);`;
         <header className="header">
           <h1>Iris Dataset Inference</h1>
           <p>Powered by <strong>skjson-js</strong> with 0 runtime dependencies.</p>
+          <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
+            <a href="https://github.com/hongyaok/skjson-js" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>GitHub Repo</a>
+            <a href="https://www.npmjs.com/package/skjson-js" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>NPM Package</a>
+          </div>
         </header>
 
         <main>
