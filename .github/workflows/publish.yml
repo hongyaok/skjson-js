@@ -57,5 +57,5 @@ jobs:
       - name: Build Package
         run: npm run build
 
-      - name: Publish Package with Provenance
-        run: npm publish --provenance --access public
+      - name: Publish Package
+        run: npm publish
