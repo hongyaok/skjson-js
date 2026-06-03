@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { loadModel } from 'skjson-js';
-import './index.css';
+import CodePanel from './CodePanel';
 
 import rfModelJson from './models/RandomForest.json';
 import lrModelJson from './models/LogisticRegression.json';
@@ -23,12 +23,20 @@ const FEATURE_NAMES = [
   "Petal Width (cm)"
 ];
 
-function App() {
+const FEATURE_RANGES = [
+  { min: 4.3, max: 7.9, step: 0.1 },
+  { min: 2.0, max: 4.4, step: 0.1 },
+  { min: 1.0, max: 6.9, step: 0.1 },
+  { min: 0.1, max: 2.5, step: 0.1 }
+];
+
+export default function App() {
   const [selectedModelKey, setSelectedModelKey] = useState<string>('Random Forest');
   const [features, setFeatures] = useState<number[]>([5.1, 3.5, 1.4, 0.2]); // Setosa-like defaults
   const [prediction, setPrediction] = useState<string | null>(null);
   const [probabilities, setProbabilities] = useState<number[] | null>(null);
   const [predictor, setPredictor] = useState<any>(null);
+  const [isMobileCodeOpen, setIsMobileCodeOpen] = useState(false);
 
   useEffect(() => {
     try {
@@ -58,93 +66,169 @@ function App() {
     }
   };
 
-  const handleFeatureChange = (index: number, value: string) => {
+  const handleFeatureChange = (index: number, value: number) => {
     const newFeatures = [...features];
-    newFeatures[index] = parseFloat(value) || 0;
+    newFeatures[index] = value;
     setFeatures(newFeatures);
   };
 
-  const codeSnippet = `import { loadModel } from 'skjson-js';
-import modelJson from './models/${selectedModelKey.replace(/ /g, '')}.json';
-
-const predictor = loadModel(modelJson);
-
-// Running inference
-const input = [${features.join(', ')}];
-const prediction = predictor.predict([input]);
-
-console.log("Predicted Class:", prediction[0]);`;
-
   return (
-    <div className="app-container">
-      <div className="glass-card">
-        <header className="header">
-          <h1>Iris Dataset Inference</h1>
-          <p>Powered by <strong>skjson-js</strong> with 0 runtime dependencies.</p>
-          <div style={{ marginTop: '1rem', display: 'flex', gap: '1rem', justifyContent: 'center' }}>
-            <a href="https://github.com/hongyaok/skjson-js" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>GitHub Repo</a>
-            <a href="https://www.npmjs.com/package/skjson-js" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', textDecoration: 'none', fontWeight: 600 }}>NPM Package</a>
-          </div>
-        </header>
+    <div className="app-wrapper">
+      {/* Background Video */}
+      <div className="bg-video-container">
+        <video 
+          className="bg-video" 
+          src="/bg/bg.mp4" 
+          autoPlay 
+          muted 
+          loop 
+          playsInline
+        />
+      </div>
 
-        <main>
-          <div className="input-group" style={{ marginBottom: '2rem' }}>
-            <label>Select Model</label>
-            <select 
-              value={selectedModelKey} 
-              onChange={e => setSelectedModelKey(e.target.value)}
-              className="model-select"
-            >
-              {Object.keys(MODELS).map(key => (
-                <option key={key} value={key}>{key} ({MODELS[key].meta.model_type})</option>
-              ))}
-            </select>
-          </div>
+      {/* Compact Header */}
+      <header className="app-header">
+        <div className="app-header-left">
+          <h1>skjson-js</h1>
+          <p>Zero-dependency universal Javascript inference for scikit-learn models</p>
+        </div>
+        <div className="app-header-links">
+          <a href="https://github.com/hongyaok/skjson-js" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+            </svg>
+            GitHub
+          </a>
+          <a href="https://www.npmjs.com/package/skjson-js" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24">
+              <path d="M0 7.396h24v9.208H12v1.562H8.052v-1.562H0V7.396zm19.688 1.563h-1.875v6.083h1.875V8.959zm-3.75 0h-3.75v6.083h1.875v-4.52h1.875v4.52h1.875V8.959zm-7.5 0H4.688v6.083h1.875v-4.52h1.875v4.52H8.44V8.959z"/>
+            </svg>
+            npm package
+          </a>
+        </div>
+      </header>
 
-          <div className="input-grid">
-            {features.map((feat, idx) => (
-              <div key={idx} className="input-group">
-                <label>{FEATURE_NAMES[idx]}</label>
-                <input 
-                  type="number" 
-                  step="0.1" 
-                  value={feat} 
-                  onChange={(e) => handleFeatureChange(idx, e.target.value)} 
-                />
+      {/* Main Pitch Layout */}
+      <main className="main-layout">
+        {/* Left Side: Parameters and Inference */}
+        <section className="panel">
+          <div className="glass-card prediction-panel">
+            <div className="scroll-content">
+              {/* Model Select */}
+              <div className="input-group">
+                <label>Select Model</label>
+                <div className="model-select-wrapper">
+                  <select 
+                    value={selectedModelKey} 
+                    onChange={e => setSelectedModelKey(e.target.value)}
+                    className="model-select"
+                  >
+                    {Object.keys(MODELS).map(key => (
+                      <option key={key} value={key}>
+                        {key} ({MODELS[key].meta.model_type})
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
-            ))}
-          </div>
 
-          <button className="predict-btn" onClick={handlePredict}>
-            Run Inference
-          </button>
-
-          {prediction !== null && (
-            <div className="result-container">
-              <h2>Predicted Iris Species</h2>
-              <div className="prediction-value">{prediction}</div>
-              
-              {probabilities && (
-                <div className="probabilities">
-                  {probabilities.map((prob, idx) => (
-                    <div key={idx} className="prob-item">
-                      <span className="prob-label">{MODELS[selectedModelKey].meta.classes?.[idx] ?? `Class ${idx}`}</span>
-                      <span className="prob-val">{(prob * 100).toFixed(2)}%</span>
+              {/* Range sliders for features */}
+              <div className="input-group">
+                <label>Parameters (Iris Features)</label>
+                <div className="sliders-grid">
+                  {features.map((feat, idx) => (
+                    <div key={idx} className="feature-slider-group">
+                      <div className="feature-slider-info">
+                        <label>{FEATURE_NAMES[idx]}</label>
+                        <input 
+                          type="number" 
+                          step={FEATURE_RANGES[idx].step}
+                          min={FEATURE_RANGES[idx].min}
+                          max={FEATURE_RANGES[idx].max}
+                          value={feat}
+                          onChange={(e) => {
+                            const val = parseFloat(e.target.value);
+                            handleFeatureChange(idx, isNaN(val) ? 0 : val);
+                          }}
+                          className="feature-value-input"
+                        />
+                      </div>
+                      <div className="slider-control-row">
+                        <span className="slider-min-max">{FEATURE_RANGES[idx].min}</span>
+                        <input 
+                          type="range"
+                          min={FEATURE_RANGES[idx].min}
+                          max={FEATURE_RANGES[idx].max}
+                          step={FEATURE_RANGES[idx].step}
+                          value={feat}
+                          onChange={(e) => handleFeatureChange(idx, parseFloat(e.target.value))}
+                          className="slider-range-input"
+                        />
+                        <span className="slider-min-max">{FEATURE_RANGES[idx].max}</span>
+                      </div>
                     </div>
                   ))}
                 </div>
+              </div>
+
+              {/* Action Button */}
+              <button className="predict-btn" onClick={handlePredict}>
+                Run Inference
+              </button>
+
+              {/* Output Result Card */}
+              {prediction !== null && (
+                <div className="result-card">
+                  <div className="result-header">Predicted Iris Species</div>
+                  <div className="result-species">{prediction}</div>
+                  
+                  {probabilities && (
+                    <div className="probabilities-list">
+                      {probabilities.map((prob, idx) => {
+                        const className = MODELS[selectedModelKey].meta.classes?.[idx] ?? `Class ${idx}`;
+                        const percentage = (prob * 100).toFixed(1);
+                        return (
+                          <div key={idx} className="prob-row">
+                            <span className="prob-label" title={className}>{className}</span>
+                            <div className="prob-bar-wrapper">
+                              <div 
+                                className="prob-bar-fill" 
+                                style={{ width: `${percentage}%` }}
+                              />
+                            </div>
+                            <span className="prob-percentage">{percentage}%</span>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
-          )}
-
-          <div className="code-snippet-container">
-            <h3>Usage Code Snippet</h3>
-            <pre><code>{codeSnippet}</code></pre>
           </div>
-        </main>
-      </div>
+        </section>
+
+        {/* Right Side: Code Displays (Collapsible on mobile) */}
+        <section className="panel">
+          {/* Desktop static display */}
+          <div className="code-panel-container-desktop">
+            <CodePanel selectedModelKey={selectedModelKey} features={features} />
+          </div>
+
+          {/* Mobile Accordion */}
+          <button 
+            className={`mobile-code-toggle ${isMobileCodeOpen ? 'open' : ''}`}
+            onClick={() => setIsMobileCodeOpen(!isMobileCodeOpen)}
+          >
+            <span>{isMobileCodeOpen ? 'Hide Integration Code' : 'Show Integration Code'}</span>
+            <span className="mobile-code-toggle-arrow">▼</span>
+          </button>
+          
+          <div className={`code-panel-container ${isMobileCodeOpen ? 'open' : ''}`}>
+            <CodePanel selectedModelKey={selectedModelKey} features={features} />
+          </div>
+        </section>
+      </main>
     </div>
   );
 }
-
-export default App;

@@ -28,18 +28,24 @@ Currently, `skjson-js` supports inference for the following model types:
 
 ## Usage Example
 
-First, export your model in Python using `skjson`:
+First, export your model in Python using [`skjson`](https://github.com/hongyaok/skjson):
 
 ```python
+from sklearn.datasets import load_iris
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
 import skjson
 
-model = RandomForestClassifier()
-model.fit(X_train, y_train)
+# Load the Iris dataset and split
+X, y = load_iris(return_X_y=True)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-# Save the model to a JSON file
-with open('model.json', 'w') as f:
-    f.write(skjson.to_json(model))
+# Train a Random Forest classifier
+clf = RandomForestClassifier(random_state=42)
+clf.fit(X_train, y_train)
+
+# Export the trained model to JSON
+skjson.save(clf, 'model.json')
 ```
 
 Then, load and predict in Javascript:
@@ -121,6 +127,11 @@ You can use `skjson-js` directly in plain HTML without any bundlers by utilizing
 ## Security
 
 This package operates with 0 runtime dependencies to ensure full immunity against supply-chain attacks. CI enforces `npm audit` on all development tools prior to publishing.
+
+## AI use
+
+This project uses AI-assisted development with Gemini and Claude Opus. 
+
 
 ## License
 
