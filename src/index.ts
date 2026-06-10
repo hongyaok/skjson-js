@@ -1,6 +1,6 @@
 import { ModelJson, Predictor, Transformer } from './types';
 import { LinearRegression, LogisticRegression, Ridge, Lasso } from './models/linear';
-import { DecisionTreeClassifier, DecisionTreeRegressor, RandomForestClassifier, RandomForestRegressor } from './models/tree';
+import { DecisionTreeClassifier, DecisionTreeRegressor, RandomForestClassifier, RandomForestRegressor, GradientBoostingClassifier, GradientBoostingRegressor } from './models/tree';
 import { GaussianNB } from './models/naive_bayes';
 import { SVC, SVR } from './models/svm';
 import { KNeighborsClassifier, KNeighborsRegressor } from './models/neighbors';
@@ -28,6 +28,10 @@ export function loadModel(modelJson: ModelJson): Predictor | Transformer {
             return new RandomForestClassifier(modelJson.params, modelJson.meta);
         case 'RandomForestRegressor':
             return new RandomForestRegressor(modelJson.params, modelJson.meta);
+        case 'GradientBoostingClassifier':
+            return new GradientBoostingClassifier(modelJson.params, modelJson.meta);
+        case 'GradientBoostingRegressor':
+            return new GradientBoostingRegressor(modelJson.params, modelJson.meta);
         case 'GaussianNB':
             return new GaussianNB(modelJson.params, modelJson.meta);
         case 'SVC':

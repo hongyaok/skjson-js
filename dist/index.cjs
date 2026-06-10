@@ -98,8 +98,15 @@ var TreeModel = class {
   }
   traverseTree(nodes, input) {
     let node = nodes[0];
-    while (node.left !== -1 && node.right !== -1 && node.feature !== -2) {
-      if (input[node.feature] <= node.threshold) {
+    while (node.left !== -1) {
+      const val = input[node.feature];
+      if (Number.isNaN(val)) {
+        if (node.missing_go_to_left) {
+          node = nodes[node.left];
+        } else {
+          node = nodes[node.right];
+        }
+      } else if (val <= node.threshold) {
         node = nodes[node.left];
       } else {
         node = nodes[node.right];
@@ -121,8 +128,9 @@ var DecisionTreeClassifier = class extends TreeModel {
   }
   predict_proba(inputs) {
     return inputs.map((input) => {
-      const probas = this.traverseTree(this.nodes, input);
-      return probas;
+      const value = this.traverseTree(this.nodes, input);
+      const total = value.reduce((a, b) => a + b, 0);
+      return total > 0 ? value.map((v) => v / total) : value;
     });
   }
   predict(inputs) {
@@ -163,12 +171,14 @@ var RandomForestClassifier = class extends TreeModel {
   }
   predict_proba(inputs) {
     return inputs.map((input) => {
-      const probas = this.trees.map((tree) => this.traverseTree(tree, input));
-      const numClasses = probas[0].length;
+      const numClasses = this.classes ? this.classes.length : this.trees[0][0].value.length;
       const avgProbas = new Array(numClasses).fill(0);
       for (let i = 0; i < this.trees.length; i++) {
+        const value = this.traverseTree(this.trees[i], input);
+        const total = value.reduce((a, b) => a + b, 0);
+        const probas = total > 0 ? value.map((v) => v / total) : value;
         for (let j = 0; j < numClasses; j++) {
-          avgProbas[j] += probas[i][j];
+          avgProbas[j] += probas[j];
         }
       }
       for (let j = 0; j < numClasses; j++) {
@@ -206,6 +216,80 @@ var RandomForestRegressor = class extends TreeModel {
         sum += Array.isArray(val) ? val[0] : val;
       }
       return sum / this.trees.length;
+    });
+  }
+};
+var GradientBoostingClassifier = class extends TreeModel {
+  trees;
+  learningRate;
+  initRaw;
+  classes;
+  nTreeOutputs;
+  constructor(params, meta) {
+    super(meta);
+    this.trees = params.trees;
+    this.learningRate = params.learning_rate;
+    this.initRaw = params.init_raw_predictions;
+    this.classes = params.classes || meta.classes;
+    this.nTreeOutputs = params.n_tree_outputs;
+  }
+  predict_proba(inputs) {
+    return inputs.map((input) => {
+      const raw = [...this.initRaw];
+      for (const stageTrees of this.trees) {
+        for (let k = 0; k < stageTrees.length; k++) {
+          const val = this.traverseTree(stageTrees[k], input);
+          const leafValue = Array.isArray(val) ? val[0] : val;
+          raw[k] += this.learningRate * leafValue;
+        }
+      }
+      if (this.nTreeOutputs === 1) {
+        const p1 = 1 / (1 + Math.exp(-raw[0]));
+        return [1 - p1, p1];
+      } else {
+        const maxRaw = Math.max(...raw);
+        const expRaw = raw.map((r) => Math.exp(r - maxRaw));
+        const sumExp = expRaw.reduce((a, b) => a + b, 0);
+        return expRaw.map((e) => e / sumExp);
+      }
+    });
+  }
+  predict(inputs) {
+    const probas = this.predict_proba(inputs);
+    return probas.map((p) => {
+      let maxIdx = 0;
+      let maxVal = p[0];
+      for (let i = 1; i < p.length; i++) {
+        if (p[i] > maxVal) {
+          maxVal = p[i];
+          maxIdx = i;
+        }
+      }
+      return this.classes ? this.classes[maxIdx] : maxIdx;
+    });
+  }
+};
+var GradientBoostingRegressor = class extends TreeModel {
+  trees;
+  learningRate;
+  initRaw;
+  constructor(params, meta) {
+    super(meta);
+    this.trees = params.trees;
+    this.learningRate = params.learning_rate;
+    this.initRaw = params.init_raw_predictions;
+  }
+  predict(inputs) {
+    return inputs.map((input) => {
+      const raw = [...this.initRaw];
+      for (const stageTrees of this.trees) {
+        for (let k = 0; k < stageTrees.length; k++) {
+          const val = this.traverseTree(stageTrees[k], input);
+          const leafValue = Array.isArray(val) ? val[0] : val;
+          raw[k] += this.learningRate * leafValue;
+        }
+      }
+      return raw[0];
     });
   }
 };
@@ -432,6 +516,10 @@ function loadModel(modelJson) {
       return new RandomForestClassifier(modelJson.params, modelJson.meta);
     case "RandomForestRegressor":
       return new RandomForestRegressor(modelJson.params, modelJson.meta);
+    case "GradientBoostingClassifier":
+      return new GradientBoostingClassifier(modelJson.params, modelJson.meta);
+    case "GradientBoostingRegressor":
+      return new GradientBoostingRegressor(modelJson.params, modelJson.meta);
     case "GaussianNB":
       return new GaussianNB(modelJson.params, modelJson.meta);
     case "SVC":

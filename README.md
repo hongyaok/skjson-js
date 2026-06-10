@@ -2,7 +2,7 @@
 
 `skjson-js` is a zero-dependency, universal Javascript inference library for Python `skjson` exported models. It parses the JSON representation of trained scikit-learn models and accurately executes inference directly in Node.js or any browser environment.
 
-[Live Demo](https://skjson-js.vercel.app/)
+[Info Page](https://skjson-info.vercel.app/)
 
 ## Features
 
